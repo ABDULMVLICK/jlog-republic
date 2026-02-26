@@ -1,14 +1,20 @@
 'use strict';
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripeApiKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeApiKey ? require('stripe')(stripeApiKey) : null;
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::order.order', ({ strapi }) => ({
     async createCheckoutSession(ctx) {
+        if (!stripe) {
+            strapi.log.error('STRIPE_SECRET_KEY is not set; checkout functionality is disabled.');
+            ctx.response.status = 500;
+            return { error: 'Stripe is not configured on the server.' };
+        }
+
         try {
             const { products } = ctx.request.body;
-
-            // Validation basique de la structure d'entrée
+            // ... existing validation ...
             if (!Array.isArray(products) || products.length === 0) {
                 ctx.response.status = 400;
                 return { error: 'No products provided' };
@@ -202,6 +208,12 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
     },
 
     async stripeWebhook(ctx) {
+        if (!stripe) {
+            strapi.log.error('STRIPE_SECRET_KEY is not set; Stripe webhook is disabled.');
+            ctx.response.status = 500;
+            return { error: 'Stripe webhook not configured' };
+        }
+
         // Webhook sécurisé Stripe: vérifie la signature et met à jour les commandes.
         const signature = ctx.request.headers['stripe-signature'];
         const endpoint_secret = process.env.STRIPE_WEBHOOK_SECRET;
