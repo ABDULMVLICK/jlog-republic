@@ -1,0 +1,29 @@
+{
+    "kind": "collectionType",
+    "collectionName": "waitlist_entries",
+    "info": {
+        "singularName": "waitlist-entry",
+        "pluralName": "waitlist-entries",
+        "displayName": "Waitlist Entry"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "attributes": {
+        "email": {
+            "type": "email"
+        },
+        "phone": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "source": {
+            "type": "string"
+        },
+        "metadata": {
+            "type": "json"
+        }
+    }
+}

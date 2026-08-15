@@ -1,0 +1,17 @@
+{
+    "kind": "singleType",
+    "collectionName": "site_content",
+    "info": {
+        "singularName": "site-content",
+        "pluralName": "site-contents",
+        "displayName": "Site Content"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "attributes": {
+        "data": {
+            "type": "json"
+        }
+    }
+}
